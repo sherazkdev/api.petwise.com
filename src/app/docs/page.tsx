@@ -5,12 +5,13 @@ import "swagger-ui-react/swagger-ui.css";
 
 export default function DocsPage() {
   return (
-    <main>
+    <div className="swagger-wrap">
       <SwaggerUI
         url="/api/openapi"
         persistAuthorization
         docExpansion="list"
+        tryItOutEnabled
       />
-    </main>
+    </div>
   );
 }

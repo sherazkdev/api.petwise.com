@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Petwise API Docs",
-  description: "Swagger UI for Petwise scan APIs",
+  title: "Petwise API Swagger",
+  description: "Try Petwise scan endpoints",
 };
 
 export default function DocsLayout({
