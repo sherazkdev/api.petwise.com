@@ -11,7 +11,7 @@ module.exports = {
       },
     },
     {
-      name: "petwise-worker",
+      name: "petwise-api-worker",
       cwd: __dirname,
       script: "npm",
       args: "run worker",
