@@ -32,16 +32,5 @@ module.exports = {
         ...sharedEnv,
       },
     },
-    {
-      name: "petwise-api-worker",
-      cwd,
-      script: "npm",
-      args: "run worker",
-      env: {
-        NODE_ENV: "production",
-        WORKER_PORT: "2020",
-        ...sharedEnv,
-      },
-    },
   ],
 };

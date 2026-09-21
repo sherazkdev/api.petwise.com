@@ -102,9 +102,6 @@ table([
   ["petName / species / allergies", "Optional. Used if the photo is actually food."],
 ]);
 
-h2("GET /api/v1/scan/jobs/{jobId}");
-p("If POST returns 202, the scan is queued. Poll with the same x-api-key.");
-
 h2("Success (200)");
 mono('{ "data": { "type": "food"|"pet", "analysis": {} }, "success": true }');
 p("If the user hits the food URL with a pet photo (or the reverse), type still matches the photo.");
@@ -139,12 +136,9 @@ table([
 h2("Status codes");
 table([
   ["200", "Scan complete."],
-  ["202", "Queued — poll the job URL."],
   ["400", "Bad request, or photo is not pet / pet food."],
   ["401", "Missing or invalid x-api-key."],
-  ["429", "Too many requests."],
   ["502", "Scan failed."],
-  ["503", "Queue full — retry shortly."],
 ]);
 
 h2("Allergies format");

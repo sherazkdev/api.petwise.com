@@ -13,11 +13,6 @@ const endpoints = [
   },
   {
     method: "GET",
-    path: "/api/v1/scan/jobs/{jobId}",
-    use: "Poll a queued scan when POST returns 202.",
-  },
-  {
-    method: "GET",
     path: "/docs",
     use: "Swagger UI. Try requests with x-api-key.",
   },
@@ -60,13 +55,10 @@ const petFields = [
 
 const codes = [
   ["200", "Scan finished. Body has data.type and data.analysis."],
-  ["202", "Queued. Poll GET /api/v1/scan/jobs/{jobId}."],
   ["400", "Bad image, validation, or photo is not pet/food."],
   ["401", "Missing or invalid x-api-key header."],
-  ["405", "Only POST on scan routes (except job GET)."],
-  ["429", "Rate limit. Wait and retry."],
+  ["405", "Only POST on scan routes."],
   ["502", "Scan model failed."],
-  ["503", "Queue full. Retry shortly."],
 ];
 
 export default function Home() {

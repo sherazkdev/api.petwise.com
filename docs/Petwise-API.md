@@ -68,15 +68,7 @@ Use this when the user photographs the animal. Result is **visible wellness only
 
 ---
 
-### 3. Job status
-
-`GET /api/v1/scan/jobs/{jobId}`
-
-If POST returns **202**, the scan is queued. Poll this URL with the same `x-api-key`.
-
----
-
-### 4. Docs
+### 3. Docs
 
 | URL | Use |
 |-----|-----|
@@ -143,13 +135,10 @@ This is **not** a veterinary diagnosis.
 | Code | Meaning |
 |------|---------|
 | 200 | Scan complete |
-| 202 | Queued — poll `/api/v1/scan/jobs/{jobId}` |
 | 400 | Validation failed, or photo is not a pet / pet food |
 | 401 | Missing or invalid `x-api-key` |
 | 405 | Wrong HTTP method |
-| 429 | Too many requests |
 | 502 | Scan failed |
-| 503 | Queue full — retry shortly |
 
 ---
 

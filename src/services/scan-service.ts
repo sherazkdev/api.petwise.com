@@ -1,6 +1,5 @@
 import { generateJsonFromImage } from "@/lib/groq-vision";
 import { compressScanImage } from "@/lib/compress-image";
-import { getScanCache, scanCacheKey, setScanCache } from "@/lib/scan-cache";
 import {
   parseFoodAnalysis,
   parsePetAnalysis,
@@ -18,15 +17,6 @@ export class ScanUnsupportedError extends Error {
 export type ScanKind = "animal" | "animal_food" | "other";
 
 export type { ScanResult };
-
-export type PreparedScan = {
-  wantFood: boolean;
-  image: File;
-  outputLanguage: string;
-  pet?: FoodPetContext;
-  cacheKey: string;
-  cached: ScanResult | null;
-};
 
 function kindFromJson(
   json: Record<string, unknown>,
@@ -69,54 +59,20 @@ function toResult(
   return { type: "food", analysis: parseFoodAnalysis(json) };
 }
 
-export async function prepareScan(input: {
-  wantFood: boolean;
-  image: File;
-  outputLanguage: string;
-  pet?: FoodPetContext;
-}): Promise<PreparedScan> {
-  const image = await compressScanImage(input.image);
-  const cacheKey = await scanCacheKey({
-    image,
-    wantFood: input.wantFood,
-    outputLanguage: input.outputLanguage,
-    pet: input.pet,
-  });
-  const cached = await getScanCache(cacheKey);
-  return {
-    ...input,
-    image,
-    cacheKey,
-    cached,
-  };
-}
-
-export async function runPreparedScan(
-  prepared: PreparedScan
-): Promise<ScanResult> {
-  const json = await generateJsonFromImage({
-    image: prepared.image,
-    prompt: scanPrompt(
-      prepared.wantFood,
-      prepared.pet,
-      prepared.outputLanguage
-    ),
-  });
-  const result = toResult(
-    json,
-    prepared.wantFood ? "animal_food" : "animal"
-  );
-  await setScanCache(prepared.cacheKey, result);
-  return result;
-}
-
 export async function scanImage(input: {
   wantFood: boolean;
   image: File;
   outputLanguage: string;
   pet?: FoodPetContext;
 }): Promise<ScanResult> {
-  const prepared = await prepareScan(input);
-  if (prepared.cached) return prepared.cached;
-  return runPreparedScan(prepared);
+  const image = await compressScanImage(input.image);
+  const json = await generateJsonFromImage({
+    image,
+    prompt: scanPrompt(
+      input.wantFood,
+      input.pet,
+      input.outputLanguage
+    ),
+  });
+  return toResult(json, input.wantFood ? "animal_food" : "animal");
 }
