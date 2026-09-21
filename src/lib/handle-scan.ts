@@ -1,4 +1,5 @@
 import ApiResponse from "@/lib/ApiResponse";
+import { InvalidScanImageError } from "@/lib/compress-image";
 import { jsonError } from "@/lib/json-error";
 import { scanImage, ScanUnsupportedError } from "@/services/scan-service";
 import { NextRequest } from "next/server";
@@ -38,7 +39,7 @@ export async function handleScan(
       { status: 200 }
     );
   } catch (e: unknown) {
-    if (e instanceof ScanUnsupportedError) {
+    if (e instanceof ScanUnsupportedError || e instanceof InvalidScanImageError) {
       return jsonError(e.message, 400);
     }
     const message = e instanceof Error ? e.message : String(e);

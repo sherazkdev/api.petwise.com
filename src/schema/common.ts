@@ -5,13 +5,17 @@ const allowedImageTypes = [
   "image/jpg",
   "image/png",
   "image/webp",
+  "image/heic",
+  "image/heif",
+  "application/octet-stream",
+  "",
 ] as const;
 
 const imageSchema = z
   .instanceof(File, { message: "Error: Image is required." })
   .refine((file) => file.size > 0, { message: "Error: Image is empty." })
   .refine((file) => allowedImageTypes.includes(file.type as (typeof allowedImageTypes)[number]), {
-    message: "Error: Validation failed, only jpg, png, webp.",
+    message: "Error: Validation failed, only jpg, png, webp, or heic.",
   })
   .refine((file) => file.size <= 10 * 1024 * 1024, {
     message: "Error: Validation failed, max 10MB.",

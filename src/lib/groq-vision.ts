@@ -70,8 +70,7 @@ export async function generateJsonFromImage(input: {
   prompt: string;
 }): Promise<Record<string, unknown>> {
   const buffer = Buffer.from(await input.image.arrayBuffer());
-  const mimeType = input.image.type || "image/jpeg";
-  const dataUrl = `data:${mimeType};base64,${buffer.toString("base64")}`;
+  const dataUrl = `data:image/jpeg;base64,${buffer.toString("base64")}`;
 
   const models = visionModels();
   let lastError = "Scan failed.";
