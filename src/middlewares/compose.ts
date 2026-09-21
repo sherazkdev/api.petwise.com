@@ -8,7 +8,6 @@ export function compose(...middlewares: Middleware[]) {
   return async (req: NextRequest) => {
     for (const middleware of middlewares) {
       const response = await middleware(req);
-      console.log(response)
 
       if (response) {
         return response;

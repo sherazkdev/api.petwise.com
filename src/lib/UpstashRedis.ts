@@ -1,19 +1,19 @@
 import { Redis } from "@upstash/redis";
-import { Ratelimit } from "@upstash/ratelimit";
-import env from "./env";
 
-const redis = Redis.fromEnv();
+function upstashRedis() {
+  const url = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!url || !token) {
+    throw new Error("Missing UPSTASH_REDIS_REST_URL or UPSTASH_REDIS_REST_TOKEN");
+  }
+  if (!/^https:\/\/[^/]+\.upstash\.io\/?$/i.test(url)) {
+    throw new Error(
+      `Invalid UPSTASH_REDIS_REST_URL (expected https://….upstash.io): ${url}`,
+    );
+  }
+  return new Redis({ url, token });
+}
 
-const ipRatelimit = new Ratelimit({
-  redis,
-  limiter: Ratelimit.slidingWindow(env.RATE_LIMIT_IP_PER_MIN, "1 m"),
-  prefix: "petwise:rl:ip",
-});
+const redis = upstashRedis();
 
-const globalRatelimit = new Ratelimit({
-  redis,
-  limiter: Ratelimit.slidingWindow(env.RATE_LIMIT_GLOBAL_PER_MIN, "1 m"),
-  prefix: "petwise:rl:global",
-});
-
-export { redis, ipRatelimit, globalRatelimit };
+export { redis };
